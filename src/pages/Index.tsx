@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import Icon from '@/components/ui/icon';
+import Airship3DViewer from '@/components/Airship3DViewer';
 
 const Index = () => {
   const [activeSection, setActiveSection] = useState('home');
@@ -21,7 +22,8 @@ const Index = () => {
       payload: '50 тонн',
       range: '2000 км',
       speed: '120 км/ч',
-      category: 'Грузовой'
+      category: 'Грузовой',
+      modelType: 'cargo' as const
     },
     {
       name: 'AN-300 Passenger',
@@ -29,7 +31,8 @@ const Index = () => {
       payload: '100 пассажиров',
       range: '1500 км',
       speed: '110 км/ч',
-      category: 'Пассажирский'
+      category: 'Пассажирский',
+      modelType: 'passenger' as const
     },
     {
       name: 'AN-700 Heavy',
@@ -37,7 +40,8 @@ const Index = () => {
       payload: '100 тонн',
       range: '2500 км',
       speed: '100 км/ч',
-      category: 'Тяжелый груз'
+      category: 'Тяжелый груз',
+      modelType: 'heavy' as const
     }
   ];
 
@@ -205,38 +209,52 @@ const Index = () => {
               Три линейки дирижаблей для различных задач
             </p>
           </div>
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="space-y-16">
             {products.map((product, index) => (
-              <Card key={index} className="overflow-hidden hover:shadow-xl transition-shadow">
-                <div className="relative h-64 bg-gradient-to-br from-primary/20 to-slate-100">
-                  <img 
-                    src={product.image} 
-                    alt={product.name} 
-                    className="w-full h-full object-cover"
-                  />
-                  <Badge className="absolute top-4 right-4 bg-white text-slate-900">{product.category}</Badge>
-                </div>
-                <div className="p-6">
-                  <h3 className="text-2xl font-bold mb-4">{product.name}</h3>
-                  <div className="space-y-3">
-                    <div className="flex justify-between items-center pb-2 border-b border-slate-200">
-                      <span className="text-slate-600">Грузоподъемность</span>
-                      <span className="font-semibold">{product.payload}</span>
+              <div key={index} className="grid md:grid-cols-2 gap-8 items-start">
+                <Airship3DViewer modelType={product.modelType} name={product.name} />
+                <Card className="p-8 h-[500px] flex flex-col justify-between">
+                  <div>
+                    <div className="flex items-center gap-3 mb-4">
+                      <Badge className="bg-primary/10 text-primary">{product.category}</Badge>
                     </div>
-                    <div className="flex justify-between items-center pb-2 border-b border-slate-200">
-                      <span className="text-slate-600">Дальность</span>
-                      <span className="font-semibold">{product.range}</span>
-                    </div>
-                    <div className="flex justify-between items-center pb-2 border-b border-slate-200">
-                      <span className="text-slate-600">Скорость</span>
-                      <span className="font-semibold">{product.speed}</span>
+                    <h3 className="text-4xl font-bold mb-6">{product.name}</h3>
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between p-4 bg-slate-50 rounded-lg">
+                        <div className="flex items-center gap-3">
+                          <Icon name="Package" className="text-primary" size={24} />
+                          <span className="text-slate-600 font-medium">Грузоподъемность</span>
+                        </div>
+                        <span className="font-bold text-lg">{product.payload}</span>
+                      </div>
+                      <div className="flex items-center justify-between p-4 bg-slate-50 rounded-lg">
+                        <div className="flex items-center gap-3">
+                          <Icon name="Navigation" className="text-primary" size={24} />
+                          <span className="text-slate-600 font-medium">Дальность</span>
+                        </div>
+                        <span className="font-bold text-lg">{product.range}</span>
+                      </div>
+                      <div className="flex items-center justify-between p-4 bg-slate-50 rounded-lg">
+                        <div className="flex items-center gap-3">
+                          <Icon name="Gauge" className="text-primary" size={24} />
+                          <span className="text-slate-600 font-medium">Скорость</span>
+                        </div>
+                        <span className="font-bold text-lg">{product.speed}</span>
+                      </div>
                     </div>
                   </div>
-                  <Button className="w-full mt-6" variant="outline">
-                    Подробнее
-                  </Button>
-                </div>
-              </Card>
+                  <div className="flex gap-3 mt-6">
+                    <Button className="flex-1 gap-2">
+                      <Icon name="FileText" size={18} />
+                      Технический паспорт
+                    </Button>
+                    <Button variant="outline" className="flex-1 gap-2">
+                      <Icon name="Mail" size={18} />
+                      Запросить цену
+                    </Button>
+                  </div>
+                </Card>
+              </div>
             ))}
           </div>
         </div>
